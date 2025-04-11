@@ -46,3 +46,332 @@
 
   </div>
 </template>
+
+<script>
+import * as settingService from '@/api/settingInfoService';
+import * as examInfoService from '@/api/examInfoService';
+import * as gradeInfoService from '@/api/gradeInfoService';
+import {VxeUI} from 'vxe-pc-ui';
+
+
+export default {
+
+  data() {
+
+
+    const formOptions = {
+      titleWidth: 80,
+      titleAlign: 'right',
+      titleColon: true,
+      span: '24',
+      size: 'small',
+      vertical: true,
+      data: [{
+        classIdValue: '',
+      }],
+      items: [
+        {
+          field: 'year',
+          title: '年份',
+          itemRender: {
+            name: 'VxeSelect',
+            options: [],
+            props: {defaultConfig: {selectMode: 'first'}},
+            events: {change: this.inputYearChange},
+          }
+        },
+        {
+          field: 'classId',
+          title: '班级',
+          modelValue: 'classIdValue',
+          vModel: 'classIdValue',
+          itemRender: {
+            name: 'VxeSelect',
+            ref: 'selectRef',
+            modelValue: 'classIdValue',
+            vModel: 'classIdValue',
+            options: [],
+            props: {defaultConfig: {selectMode: 'last'}, clearable: true, modelValue: 'classIdValue',
+              vModel: 'classIdValue',},
+          },
+        },
+        {
+          field: 'semesterId',
+          title: '学期',
+          itemRender: {
+            name: 'VxeSelect',
+            options: [],
+            props: {defaultConfig: {selectMode: 'last'}},
+          }
+        },
+        {
+          field: 'subjectId',
+          title: '学科',
+          itemRender: {
+            name: 'VxeSelect',
+            options: [],
+            props: {defaultConfig: {selectMode: 'last'}},
+          }
+        },
+        {
+          field: 'examCode',
+          title: '考试名称',
+          itemRender: {
+            name: 'VxeInput',
+            props: {placeholder: "如：第一单元测试"},
+          },
+
+        },
+        {
+          field: 'examDate',
+          title: '考试时间',
+          itemRender: {name: 'VxeDatePicker'},
+        },
+      ],
+      rules: {
+        classId: [{required: true, message: '请选择班级'}],
+        semesterId: [{required: true, message: '请选择学期'}],
+        subjectId: [{required: true, message: '请选择科目'}],
+        examName: [{required: true, message: '请输入考试名称'}],
+        examDate: [{required: true, message: '请选择考试时间'}],
+      }
+
+    }
+
+
+    const customConfig = {
+      allowVisible: true,
+      allowFixed: false,
+      allowResizable: false,
+      allowSort: false
+    }
+
+    // 表格配置
+    const gridOptions = {
+      showOverflow: true,
+      border: true,
+      loading: false,
+      height: 650,
+      printConfig: {},
+      columnConfig: {
+        useKey: true
+      },
+      filterConfig: {
+        iconVisibleMethod: () => {
+          return false
+        }
+      },
+      editConfig: {
+        trigger: 'click',
+        mode: 'row'
+      },
+      toolbarConfig: {
+        refresh: false,
+        import: false,
+        export: true,
+        print: true,
+        zoom: false,
+        custom: true,
+      },
+      exportConfig: {
+        type: 'xlsx'
+      },
+      rowConfig: {
+        useKey: true
+      },
+      formConfig: {
+        data: {},
+
+        items: [
+          {
+            field: 'year',
+            title: '年份',
+            itemRender: {
+              name: 'VxeSelect',
+              options: [],
+              props: {defaultConfig: {selectMode: 'first'}},
+              // events: {change: this.createYearChange},
+            }
+          },
+          {
+            field: 'class',
+            title: '班级',
+            itemRender: {
+              name: 'VxeSelect',
+              vModel: 'createClass',
+              options: [],
+              // props: {defaultConfig: {selectMode: 'last'}},
+              events: {change: this.filterChange},
+            }
+          },
+          {
+            field: 'semester',
+            title: '学期',
+            itemRender: {
+              name: 'VxeSelect',
+              vModel: 'createSemester',
+              options: [],
+              props: {defaultConfig: {selectMode: 'last'}},
+              events: {change: this.filterChange},
+            }
+          },
+          {
+            field: 'subject',
+            title: '学科',
+            itemRender: {
+              name: 'VxeSelect',
+              vModel: 'createSubject',
+              options: [],
+              props: {defaultConfig: {selectMode: 'last'}},
+              events: {change: this.filterChange},
+            }
+          },
+          {
+            field: 'examName',
+            title: '考试名称',
+            itemRender: {
+              name: 'VxeSelect',
+              options: [],
+              props: {defaultConfig: {selectMode: 'last'}},
+              events: {change: this.filterChange},
+            },
+          },
+
+          {
+            itemRender: {
+              name: 'VxeButtonGroup',
+              options: [
+                // {type: 'submit', content: '查询', status: 'primary'},
+                {type: 'submit', icon: "vxe-icon-search", content: '查询', status: 'primary'},
+              ]
+            }
+          }
+        ],
+        rules: {
+          classId: [{required: true, message: '请选择班级'}],
+          semesterId: [{required: true, message: '请选择学期'}],
+          subjectId: [{required: true, message: '请选择科目'}],
+          examName: [{required: true, message: '请输入考试名称'}],
+        }
+
+      },
+      columns: [
+        {field: 'seq', type: 'seq', width: 70, align: 'center', cellType: 'string'},
+        {field: 'studentId', title: '学号', visible: true, align: 'center', cellType: 'string'},
+        {
+          title: '姓名',
+          align: 'center',
+          children: [
+            {
+              field: 'studentName',
+              filters: [
+                {data: ''}
+              ],
+              filterMethod: ({option, row, column}) => {
+                if (option.data) {
+                  return `${row[column.field]}`.indexOf(option.data) > -1
+                }
+                return true
+              },
+              slots: {
+                header: 'nameHeader'
+              }
+            }
+          ]
+        },
+
+        {
+          title: '分数',
+          field: 'score',
+          align: 'center',
+          cellType: 'string',
+          editRender: {name: 'VxeInput', props: {type: 'input'}, events: {blur: this.saveScore}},
+        },
+        {
+          field: 'gradeLevel',
+          title: '等级',
+          align: 'center',
+          cellType: 'string',
+        },
+        {
+          field: 'examDate',
+          title: '考试时间',
+          align: 'center',
+          cellType: 'string',
+        },
+      ],
+      data: [],
+
+    }
+
+    const allList = [];
+
+    const myClassList = [];
+    const mySemesterList = [];
+    const mySubjectList = [];
+
+    return {
+      gridOptions,
+      customConfig,
+      allList,
+      myClassList,
+      mySemesterList,
+      mySubjectList,
+      formOptions,
+      showEditPopup: false,
+      loading: false,
+    }
+  },
+
+  mounted() {
+    const $table = this.$refs.gridRef
+    const $toolbar = this.$refs.toolbarRef
+    if ($table && $toolbar) {
+      $table.connect($toolbar)
+    }
+    this.getSettingOptions()
+
+  },
+
+  created() {
+    // this.getGradeList();
+  },
+
+  methods: {
+
+    async inputYearChange( row, yearRow ) {
+      const year = yearRow.value;
+      if (year != null && year !== '') {
+        // 加载班级下拉选项
+        settingService.getTeacherClassListByCondition({year: year}).then(response => {
+          if (response.code === 200) {
+            this.formOptions.data = {year: year, classId: ''}
+            this.formOptions.items[1].itemRender.options = response.data;
+            if (response.data[0] != null) {
+              const classId = response.data[0].value;
+              this.formOptions.data = {year: year, classId: classId}
+              // 加载学期下拉选项
+              settingService.getTeacherSemesterListByCondition({year: year, classId: classId}).then(response => {
+                if (response.code === 200) {
+                  this.formOptions.items[2].itemRender.options = response.data;
+                  if (response.data[0] != null) {
+                    const semesterId = response.data[0].value;
+                    this.formOptions.data = {year: year, classId: classId, semesterId: semesterId}
+                    // 加载学科下拉选项
+                    settingService.getTeacherSubjectListByCondition({year: year, classId: classId, semesterId: semesterId}).then(response => {
+                      if (response.code === 200) {
+                        this.formOptions.items[3].itemRender.options = response.data;
+                        if (response.data[0] != null) {
+                          const subjectId = response.data[0].value;
+                          this.formOptions.data = {year: year, classId: classId, semesterId: semesterId, subjectId: subjectId}
+                        }
+                      }
+                    });
+                  }
+                }
+              });
+            }
+            }
+        });
+      }
+    },
