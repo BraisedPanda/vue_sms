@@ -21,18 +21,20 @@ const createConfig = (method, url, data = {}, headers = {}, config = {}) => ({
     ...config, // 支持额外的配置选项
 });
 
-const handleResponse = async (requestPromise, method, url) => {
+const handleResponse = async (requestPromise) => {
     try {
         const response = await requestPromise;
         return response.data;
     } catch (error) {
-        console.error(
-            `Error occurred while making ${method} request to ${url}:`,
-            error.response ?
-                `${error.response.status} - ${error.response.data.message}` :
-                error.message
-        );
-        throw error; // 重新抛出错误，以便调用者可以处理
+        // const message = error.response.data.message;
+        // VxeUI.modal.message({content: `未授权222: ${message}`, status: 'warning'});
+        // console.error(
+        //     `Error occurred while making ${method} request to ${url}:`,
+        //     error.response ?
+        //         `${error.response.status} - ${error.response.data.message}` :
+        //         error.message
+        // );
+        // throw error; // 重新抛出错误，以便调用者可以处理
     }
 };
 
