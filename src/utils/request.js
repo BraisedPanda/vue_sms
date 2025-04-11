@@ -1,5 +1,6 @@
 // 引入 axios
 import axios from "axios"; // 使用前要先安装依赖：npm install axios
+import {VxeUI} from 'vxe-pc-ui';
 
 // 创建axios实例
 const request = axios.create({
@@ -35,42 +36,87 @@ request.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.log(error);
         return Promise.reject(error);
     }
 );
 
 // 响应拦截器
+// request.interceptors.response.use(
+//     (response) => {
+//         // 对响应数据做处理
+//         return response;
+//     },
+//     (error) => {
+//         VxeUI.modal.message({content: "error0000000000000:" + error.toString());
+//         // 请求失败进行的操作
+//         if (error.response && error.response.status) {
+//             switch (error.response.status) {
+//                 case 401:
+//                     VxeUI.modal.message({content: "尚未登录，请登录22222！");
+//                     this.$router.replace("/login");
+//                     break;
+//                 case 403:
+//                     VxeUI.modal.message({content: "权限不足22222！");
+//                     break;
+//                 case 404:
+//                     VxeUI.modal.message({content: "请求资源不存在22222！");
+//                     break;
+//                 case 500:
+//                     VxeUI.modal.message({content: "服务器错误22222！");
+//                     break;
+//                 default:
+//                     VxeUI.modal.message({content: `请求错误2222: ${error.response.status} - ${error.response.data.message}`);
+//             }
+//         } else {
+//             VxeUI.modal.message({content: "网络错误或请求超时2222！");
+//         }
+//         return Promise.reject(error);
+//     }
+// );
+
+
+// 响应拦截器
 request.interceptors.response.use(
-    (response) => {
-        // 对响应数据做处理
+    response => {
+        // 对响应数据做些什么
         return response;
     },
-    // (error) => {
-    //     // 请求失败进行的操作
-    //     if (error.response && error.response.status) {
-    //         switch (error.response.status) {
-    //             case 401:
-    //                 ElMessage.warning("尚未登录，请登录！");
-    //                 router.push("/login");
-    //                 break;
-    //             case 403:
-    //                 ElMessage.error("权限不足！");
-    //                 break;
-    //             case 404:
-    //                 ElMessage.error("请求资源不存在！");
-    //                 break;
-    //             case 500:
-    //                 ElMessage.error("服务器错误！");
-    //                 break;
-    //             default:
-    //                 ElMessage.error(`请求错误: ${error.response.status} - ${error.response.data.message}`);
-    //         }
-    //     } else {
-    //         ElMessage.error("网络错误或请求超时！");
-    //     }
-    //     return Promise.reject(error);
-    // }
+    error => {
+        // 对响应错误做些什么
+        if (error.response) {
+            // 请求已发出，服务器响应了状态码，但状态码在 2xx 之外
+            const status = error.response.data.code;
+            const message = error.response.data.message;
+
+            // 根据状态码显示不同的错误信息
+            switch (status) {
+                case 400:
+                    VxeUI.modal.message({content: `请求错误: ${message}`, status: 'warning'});
+                    break;
+                case 401:
+                    VxeUI.modal.message({content: `未授权: ${message}`, status: 'warning'});
+                    break;
+                case 403:
+                    VxeUI.modal.message({content: `禁止访问: ${message}`, status: 'warning'});
+                    break;
+                case 404:
+                    VxeUI.modal.message({content: `未找到: ${message}`, status: 'warning'});
+                    break;
+                case 500:
+                    VxeUI.modal.message({content: `提示: ${message}`, status: 'warning'});
+                    break;
+                default:
+                    VxeUI.modal.message({content: `${message}`, status: 'warning'});
+            }
+        } else if (error.request) {
+            // 请求已发出，但没有收到响应
+            VxeUI.modal.message({content: '请求错误: 没有收到响应', status: 'warning'});
+        } else {
+            // 其他错误
+            VxeUI.modal.message({content: `错误信息: ${error.message}`, status: 'warning'});
+        }
+        return Promise.reject(error);
+    }
 );
 
 export default request;
