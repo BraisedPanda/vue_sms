@@ -562,9 +562,13 @@ export default {
       this.showEditPopup = true
     },
 
- 
-
-
-
+ // 创建考试信息
+    async createExamInfo() {
+      const $form = this.$refs.formRef
+      if ($form) {
+        const errMap = await $form.validate()
+        if (!errMap) {
+          // 获取输入框中的值
+  
  
 
