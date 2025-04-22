@@ -60,6 +60,8 @@ export default {
   data() {
 
 
+       const examMessage = '考试信息';
+
     const formOptions = {
       titleWidth: 80,
       titleAlign: 'right',
@@ -92,8 +94,8 @@ export default {
             modelValue: 'classIdValue',
             vModel: 'classIdValue',
             options: [],
-            props: {defaultConfig: {selectMode: 'last'}, clearable: true, modelValue: 'classIdValue',
-              vModel: 'classIdValue',},
+            props: {defaultConfig: {selectMode: 'last'}},
+            events: {change: this.inputClassChange},
           },
         },
         {
@@ -103,6 +105,7 @@ export default {
             name: 'VxeSelect',
             options: [],
             props: {defaultConfig: {selectMode: 'last'}},
+            events: {change: this.inputSemesterChange},
           }
         },
         {
@@ -138,6 +141,7 @@ export default {
       }
 
     }
+
 
 
     const customConfig = {
