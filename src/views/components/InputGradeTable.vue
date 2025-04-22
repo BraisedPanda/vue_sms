@@ -58,9 +58,7 @@ import {VxeUI} from 'vxe-pc-ui';
 export default {
 
   data() {
-
-
-       const examMessage = '考试信息';
+    const examMessage = '考试信息';
 
     const formOptions = {
       titleWidth: 80,
@@ -141,6 +139,7 @@ export default {
       }
 
     }
+
 
     const customConfig = {
       allowVisible: false,
@@ -344,7 +343,7 @@ export default {
   },
 
   methods: {
-    
+
     // 获取年份下拉框选项
     getYearOptions() {
       // 加载年份下拉选项
@@ -558,11 +557,12 @@ export default {
       }
     },
 
+
     addEvent() {
       this.showEditPopup = true
     },
 
-  // 创建考试信息
+    // 创建考试信息
     async createExamInfo() {
       const $form = this.$refs.formRef
       if ($form) {
@@ -576,7 +576,89 @@ export default {
           const subjectId = inputData.subjectId;
           const examName = inputData.examCode;
           const examDate = inputData.examDate;
-      
-  
- 
+          if ((year == null || year === '')
+              || (classId == null || classId === '')
+              || (semesterId == null || semesterId === '')
+              || (subjectId == null || subjectId === '')
+              || (examName == null || examName === '')
+              || (examDate == null || examDate === '')) {
+            VxeUI.modal.message({content: '输入框不允许为空', status: 'warning'})
+            return
+          }
+          const data = {};
+          data.year = year;
+          data.classId = classId;
+          data.semesterId = semesterId;
+          data.subjectId = subjectId;
+          data.examName = examName;
+          data.examDate = examDate;
+          examInfoService.createExamInfo(JSON.stringify(data)).then((response) => {
+            if (response.code === 200) {
+              VxeUI.modal.message({content: `创建成功`, status: 'success'});
+              setTimeout(() => {
+                const examInfo = response.data;
 
+                settingService.getTeacherExamListByCondition({
+                  year: year,
+                  classId: classId,
+                  semesterId: semesterId,
+                  subjectId: subjectId
+                }).then(response => {
+                  if (response.code === 200) {
+                    this.gridOptions.formConfig.items[4].itemRender.options = response.data;
+                    this.gridOptions.formConfig.data = {
+                      year: examInfo.year,
+                      classId: examInfo.classId,
+                      semesterId: examInfo.semesterId,
+                      subjectId: examInfo.subjectId,
+                      examCode: examInfo.examCode
+                    };
+                  }
+                });
+                this.queryGradeInfo();
+              }, 500)
+
+            } else {
+              VxeUI.modal.message({content: response.message, status: 'warning'});
+            }
+          }).catch(() => {
+          });
+          this.showEditPopup = false
+        }
+      }
+    },
+
+    // 查询考试信息
+    queryGradeInfo() {
+      const searchData = this.gridOptions.formConfig.data;
+      this.gridOptions.loading = true;
+      gradeInfoService.getGradeList(JSON.stringify(searchData)).then((response) => {
+        if (response.code === 200) {
+          this.gridOptions.data = response.data;
+          this.setExamMessage();
+        } else {
+          VxeUI.modal.message({content: response.message, status: 'warning'});
+        }
+      });
+      this.gridOptions.loading = false;
+    },
+
+    saveScore(cellParams) {
+      const {row} = cellParams
+      const obid = row.obid;
+      let score = row.score;
+      if (score !== '' && (Number(score) < 0 || Number(score) > 100)) {
+        return;
+      }
+      this.gridOptions.loading = true;
+      gradeInfoService.update({'obid': obid, 'score': score}).then(response => {
+        if (response.code === 200) {
+          this.queryGradeInfo();
+        }
+      });
+      this.gridOptions.loading = false;
+    },
+  },
+}
+
+</script>
