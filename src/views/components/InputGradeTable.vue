@@ -562,13 +562,21 @@ export default {
       this.showEditPopup = true
     },
 
- // 创建考试信息
+  // 创建考试信息
     async createExamInfo() {
       const $form = this.$refs.formRef
       if ($form) {
         const errMap = await $form.validate()
         if (!errMap) {
           // 获取输入框中的值
+          const inputData = this.formOptions.data;
+          const year = inputData.year;
+          const classId = inputData.classId;
+          const semesterId = inputData.semesterId;
+          const subjectId = inputData.subjectId;
+          const examName = inputData.examCode;
+          const examDate = inputData.examDate;
+      
   
  
 
