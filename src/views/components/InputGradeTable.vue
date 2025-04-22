@@ -336,12 +336,11 @@ export default {
     if ($table && $toolbar) {
       $table.connect($toolbar)
     }
-    this.getSettingOptions()
-
   },
 
   created() {
-    // this.getGradeList();
+    this.getYearOptions()
+
   },
 
   methods: {
