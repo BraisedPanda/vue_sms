@@ -7,8 +7,9 @@
       <div class="table-responsive p-0">
         <p style="margin-left: 2%">
           <vxe-button status="success" icon="vxe-icon-add" @click="addEvent">新增</vxe-button>
-          <vxe-notice-bar content="温馨提示：录入新考试成绩时1，请先新增并填写考试信息，然后点击查询并修改学生考试成绩"></vxe-notice-bar>
+<!--          <vxe-notice-bar content="温馨提示：录入新考试成绩时，请先新增并填写考试信息，然后点击查询并修改学生考试成绩"></vxe-notice-bar>-->
         </p>
+        <vxe-tag status="primary" :content="examMessage" icon="vxe-icon-feedback"></vxe-tag>
         <vxe-grid
             ref="gridRef"
             :custom-config="customConfig"
@@ -36,7 +37,7 @@
             :loading="loading"
             :confirm-closable="false"
             @confirm="createExamInfo">
-          <vxe-form ref="formRef"  v-bind="formOptions">
+          <vxe-form ref="formRef" v-bind="formOptions">
 
           </vxe-form>
         </vxe-modal>
