@@ -558,6 +558,13 @@ export default {
       }
     },
 
+    addEvent() {
+      this.showEditPopup = true
+    },
+
+ 
+
+
 
  
 
