@@ -142,10 +142,8 @@ export default {
 
     }
 
-
-
     const customConfig = {
-      allowVisible: true,
+      allowVisible: false,
       allowFixed: false,
       allowResizable: false,
       allowSort: false
@@ -155,6 +153,8 @@ export default {
     const gridOptions = {
       showOverflow: true,
       border: true,
+      round: true,
+      stripe: true,
       loading: false,
       height: 650,
       printConfig: {},
@@ -170,14 +170,14 @@ export default {
         trigger: 'click',
         mode: 'row'
       },
-      toolbarConfig: {
-        refresh: false,
-        import: false,
-        export: true,
-        print: true,
-        zoom: false,
-        custom: true,
-      },
+      // toolbarConfig: {
+      //   refresh: false,
+      //   import: false,
+      //   export: true,
+      //   print: true,
+      //   zoom: false,
+      //   custom: true,
+      // },
       exportConfig: {
         type: 'xlsx'
       },
@@ -195,50 +195,50 @@ export default {
               name: 'VxeSelect',
               options: [],
               props: {defaultConfig: {selectMode: 'first'}},
-              // events: {change: this.createYearChange},
+              events: {change: this.queryYearChange},
             }
           },
           {
-            field: 'class',
+            field: 'classId',
             title: '班级',
             itemRender: {
               name: 'VxeSelect',
               vModel: 'createClass',
               options: [],
               // props: {defaultConfig: {selectMode: 'last'}},
-              events: {change: this.filterChange},
+              events: {change: this.queryClassChange},
             }
           },
           {
-            field: 'semester',
+            field: 'semesterId',
             title: '学期',
             itemRender: {
               name: 'VxeSelect',
               vModel: 'createSemester',
               options: [],
               props: {defaultConfig: {selectMode: 'last'}},
-              events: {change: this.filterChange},
+              events: {change: this.querySemesterChange},
             }
           },
           {
-            field: 'subject',
+            field: 'subjectId',
             title: '学科',
             itemRender: {
               name: 'VxeSelect',
               vModel: 'createSubject',
               options: [],
               props: {defaultConfig: {selectMode: 'last'}},
-              events: {change: this.filterChange},
+              events: {change: this.querySubjectChange},
             }
           },
           {
-            field: 'examName',
+            field: 'examCode',
             title: '考试名称',
             itemRender: {
               name: 'VxeSelect',
               options: [],
               props: {defaultConfig: {selectMode: 'last'}},
-              events: {change: this.filterChange},
+              events: {change: this.queryExamChange},
             },
           },
 
@@ -253,10 +253,11 @@ export default {
           }
         ],
         rules: {
+          year: [{required: true, message: '请选择年份'}],
           classId: [{required: true, message: '请选择班级'}],
           semesterId: [{required: true, message: '请选择学期'}],
           subjectId: [{required: true, message: '请选择科目'}],
-          examName: [{required: true, message: '请输入考试名称'}],
+          examCode: [{required: true, message: '请选择考试名称'}],
         }
 
       },
@@ -325,6 +326,7 @@ export default {
       formOptions,
       showEditPopup: false,
       loading: false,
+      examMessage
     }
   },
 
