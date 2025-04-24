@@ -49,11 +49,10 @@ export default {
 
       <li class="nav-item">
         <sidenav-item
-          to="/tables"
+          to="/quireGrade"
           :class="getRoute() === 'tables' ? 'active' : ''"
           :navText="'考试成绩查询'"
         >
-
                     <template v-slot:icon>
                       <i
                         class="vxe-icon-search text-info text-sm opacity-10"
