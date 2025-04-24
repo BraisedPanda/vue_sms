@@ -20,14 +20,13 @@ const getRoute = () => {
 export default {
   methods: {
     logout: function () {
-      localStorage.removeItem('user');
+      localStorage.removeItem('token');
       this.$router.replace('/login');
     }
   }
 }
 
 </script>
-
 
 
 <template>
@@ -40,7 +39,7 @@ export default {
         <sidenav-item
           to="/home"
           :class="getRoute() === 'home' ? 'active' : ''"
-          :navText="isRTL ? 'لوحة القيادة' : '主页'"
+          :navText="'主页'"
         >
           <template v-slot:icon>
             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -52,11 +51,44 @@ export default {
         <sidenav-item
           to="/tables"
           :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : '统计表'"
+          :navText="'考试成绩查询'"
+        >
+
+                    <template v-slot:icon>
+                      <i
+                        class="vxe-icon-search text-info text-sm opacity-10"
+                      ></i>
+                    </template>
+        </sidenav-item>
+      </li>
+
+      <li class="nav-item">
+        <sidenav-item
+            to="/inputGrade"
+            :class="getRoute() === 'tables' ? 'active' : ''"
+            :navText="'新建考试成绩'"
         >
           <template v-slot:icon>
             <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+                class="vxe-icon-add text-warning text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="mt-3 nav-item">
+        <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6 ms-2">
+          统计分析
+        </h6>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+            to="/studentChart"
+            :class="getRoute() === 'tables' ? 'active' : ''"
+            :navText="'学生成绩报表'"
+        >
+          <template v-slot:icon>
+            <i
+                class="vxe-icon-chart-line text-success text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
@@ -70,30 +102,6 @@ export default {
         >
           <template v-slot:icon>
             <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/virtual-reality"
-          :class="getRoute() === 'virtual-reality' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Virtual Reality'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/rtl-page"
-          :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="RTL"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -130,7 +138,7 @@ export default {
 
       <li class="nav-item">
         <sidenav-item
-          to="/login"
+          to="/loginService"
           :class="getRoute() === 'login' ? 'active' : ''"
           :navText="isRTL ? 'تسجيل الدخول' : '登录'"
         >
