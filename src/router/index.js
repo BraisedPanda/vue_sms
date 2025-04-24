@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
-import Tables from "../views/Tables.vue";
+
+import GradeInquiryTable from "../views/components/GradeInquiryTable.vue";
 import InputGradeTable from "../views/components/InputGradeTable.vue";
 import StudentChart from "../views/components/chart/StudentChart.vue";
 import Billing from "../views/Billing.vue";
@@ -23,9 +24,9 @@ const routes = [
     }
   },
   {
-    path: "/tables",
+    path: "/quireGrade",
     name: "考试成绩查询",
-    component: Tables,
+    component: GradeInquiryTable,
     meta:{
       needLogin: true
     }
