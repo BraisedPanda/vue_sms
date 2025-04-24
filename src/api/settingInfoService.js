@@ -21,39 +21,12 @@ export function getTeacherExamListByCondition(params) {
     return http.post("/settingInfo/getTeacherExamListByCondition", params);
 }
 
-
-
-
-
-
-
-export function getGradeSetting(params) {
-    return http.get("/settingInfo/getGradeSetting", params);
-}
-export function getSubjectSetting(params) {
-    return http.get("/settingInfo/getSubjectSetting", params);
-}
-export function getUnitySetting(params) {
-    return http.get("/settingInfo/getUnitySetting", params);
+export function getTeacherStudentListByCondition(params) {
+    return http.post("/settingInfo/getTeacherStudentListByCondition", params);
 }
 
-export function getTeacherClassList() {
-    return http.get("/settingInfo/getTeacherClassList");
+export function getExamMessage(params) {
+    return http.post("/settingInfo/getExamMessage", params);
 }
 
 
-export function getTeacherSemesterList() {
-    return http.get("/settingInfo/getTeacherSemesterList");
-}
-
-export function getTeacherSemesterListByYear(params) {
-    return http.post("/settingInfo/getTeacherSemesterListByYear", params);
-}
-
-export function getTeacherSubjectList() {
-    return http.get("/settingInfo/getTeacherSubjectList");
-}
-
-export function getTeacherExamList() {
-    return http.get("/settingInfo/getTeacherExamList");
-}
