@@ -166,6 +166,7 @@ export default {
 
     return {
       chart1: null,
+      chart2: null,
       formData,
       yearOptions,
       classOptions,
@@ -353,7 +354,9 @@ export default {
 
 
     initChart1() {
-      this.chart = echarts.init(this.$refs.chart1);
+      if(this.$refs.chart1 != null) {
+        this.chart = echarts.init(this.$refs.chart1);
+      }
       const option = {
         title: {
           text: '成绩趋势统计',
@@ -394,7 +397,9 @@ export default {
     },
 
     initChart2() {
-      this.chart = echarts.init(this.$refs.chart2);
+      if(this.$refs.chart2 != null) {
+        this.chart = echarts.init(this.$refs.chart2);
+      }
       const option = {
         title: {
           text: '班级排名统计',
