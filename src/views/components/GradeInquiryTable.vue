@@ -13,9 +13,9 @@
                   ref="tableRef"
                   :custom-config="customConfig"
                   v-bind="gridOptions"
+                  @sort-change="sortChangeEvent"
                   @page-change="pageChangeEvent"
                   @form-submit="queryGradeInfo"
-                  @form-reset="formResetEvent"
               >
               </vxe-grid>
             </div>
@@ -51,6 +51,9 @@ export default {
       border: true,
       loading: false,
       height: 650,
+      sortConfig: {
+        remote: true
+      },
       printConfig: {},
       columnConfig: {
         useKey: true
@@ -160,13 +163,19 @@ export default {
 
       },
       columns: [
-        {field: 'seq', type: 'seq', width: 70, align: 'center', cellType: 'string'},
-        {field: 'studentId', title: '学号', visible: false, align: 'center', cellType: 'string'},
-        {field: 'studentName', title: '姓名', align: 'center', cellType: 'string'},
-        {field: 'score', title: '分数', align: 'center', cellType: 'string'},
-        {field: 'gradeLevel', title: '等级', align: 'center', cellType: 'string'},
+        {field: 'seq', type: 'seq', width: 70, align: 'center'},
+        {field: 'studentId', title: '学号', visible: false, align: 'center'},
+        {field: 'studentName', title: '姓名', align: 'center', sortable: true},
+        {field: 'score', title: '分数', align: 'center', sortType: 'number', sortable: true},
+        {field: 'gradeLevel', title: '等级', align: 'center'},
       ],
       data: [],
+      // 分页连续序号的相关代码
+      seqConfig: {
+        seqMethod: ({rowIndex}) => {
+          return (this.gridOptions.pagerConfig.currentPage - 1) * this.gridOptions.pagerConfig.pageSize + rowIndex + 1
+        }
+      },
 
     }
 
@@ -376,7 +385,7 @@ export default {
 
     // 模拟前端分页
     handlePageData() {
-      this.gridOptions.loading = true
+
       const searchData = this.gridOptions.formConfig.data;
       const studentName = searchData.studentName;
       const score = searchData.score != null ? searchData.score.toString() : "";
@@ -396,8 +405,8 @@ export default {
           this.gridOptions.pagerConfig.total = this.allList.length
           this.gridOptions.data = this.allList.slice((currentPage - 1) * pageSize, currentPage * pageSize)
         }
-        this.gridOptions.loading = false
-      }, 100)
+
+      }, 0)
     },
 
     pageChangeEvent({pageSize, currentPage}) {
@@ -407,27 +416,66 @@ export default {
     },
 
 
-    queryGradeInfo() {
-      const searchData = this.gridOptions.formConfig.data;
-      this.gridOptions.loading = true;
-      gradeInfoService.getGradeList(JSON.stringify(searchData)).then((response) => {
-        if (response.code === 200) {
-          this.gridOptions.data = response.data;
-          this.setExamMessage();
-          this.allList = response.data;
-        } else {
-          VxeUI.modal.message({content: response.message, status: 'warning'});
-        }
-      }).catch(() => {
-        this.$MessageAi.showMessage("服务器错误！")
-      });
-      this.gridOptions.loading = false;
-      this.handlePageData();
+    queryGradeInfo(field, order) {
+      // this.gridOptions.loading = true
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // this.gridOptions.loading = false
+          const searchData = this.gridOptions.formConfig.data;
+          gradeInfoService.getGradeList(JSON.stringify(searchData)).then((response) => {
+            if (response.code === 200) {
+
+              if (field && order) {
+                let list = []
+                if (order === 'asc' || order === 'desc') {
+                  if (field === 'score') {
+                    // 分离数字和字符
+                    let numbers = response.data.filter(item => !isNaN(item.score)); // 提取数字
+                    let strings = response.data.filter(item => isNaN(item.score)); // 提取字符
+                    numbers.sort((a, b) => {
+                      if (isNaN(a[field])) return -1
+                      if (isNaN(b[field])) return -1
+                      const aVal = Number(a[field])
+                      const bVal = Number(b[field])
+                      return aVal === bVal ? 0 : (aVal > bVal ? 1 : -1)
+                    })
+                    list = list.concat(strings);
+                    list = list.concat(numbers);
+                  } else {
+                    list = response.data.sort((a, b) => {
+                      const aVal = a[field]
+                      const bVal = b[field]
+                      return aVal === bVal ? 0 : (aVal > bVal ? 1 : -1)
+                    })
+                  }
+                }
+                if (order === 'desc') {
+                  list.reverse()
+                }
+                this.gridOptions.data = list
+                this.allList = list;
+              } else {
+                this.gridOptions.data = response.data
+                resolve(response.data)
+                this.allList = response.data;
+              }
+              this.setExamMessage();
+              this.handlePageData();
+            } else {
+              VxeUI.modal.message({content: response.message, status: 'warning'});
+            }
+          }).catch(() => {
+            this.$MessageAi.showMessage("服务器错误！")
+          });
+
+
+        }, 300)
+      })
     },
 
-
-    formResetEvent() {
-      this.handlePageData()
+    sortChangeEvent({field, order}) {
+      this.gridOptions.pagerConfig.currentPage = 1;
+      this.queryGradeInfo(field, order)
     },
 
 
