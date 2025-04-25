@@ -26,8 +26,9 @@ onBeforeUnmount(() => {
 
 <script>
 
-import * as loginService  from '@/api/login';
-// import axios from 'axios';
+import * as loginService  from '@/api/loginService';
+import {setToken} from "@/utils/auth";
+import {VxeUI} from "vxe-pc-ui";
 export default {
   name: 'LoginCard',
 
@@ -50,21 +51,21 @@ export default {
       loginService.loginIn({
         "username": this.username,
         "password": this.password
-      }, {
-        withCredentials: true // 允许跨域请求携带Cookie
       }).then((res) => {
         if(res.code === 200) {
           // 假设后端返回的用户信息在response.data中
           const token = res.data;
           // 将用户信息存储在Local Storage中
-          localStorage.setItem('token', token);
+          setToken(token);
           // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          VxeUI.modal.message({content: `登录成功!`, status: 'success'});
           this.$router.replace('/home');
         }else {
+          VxeUI.modal.message({content: res.message, status: 'warning'});
           this.$MessageAi.showMessage(res.message);
         }
     }).catch(() => {
-          this.$MessageAi.showMessage("服务器错误！")
+        VxeUI.modal.message({content: `服务器错误`, status: 'warning'});
       });
   },
 
