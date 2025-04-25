@@ -129,6 +129,7 @@ import {VxeUI} from 'vxe-pc-ui'
           <!--        </div>-->
         </div>
       </div>
+      <vxe-text class="ps-3" icon="vxe-icon-warning-circle-fill" size="mini" status="info">成绩低于50不显示</vxe-text>
     </div>
   </div>
 </template>
