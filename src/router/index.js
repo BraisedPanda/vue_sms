@@ -3,7 +3,8 @@ import Dashboard from "../views/Dashboard.vue";
 
 import GradeInquiryTable from "../views/components/GradeInquiryTable.vue";
 import InputGradeTable from "../views/components/InputGradeTable.vue";
-import StudentChart from "../views/components/chart/StudentChart.vue";
+import StudentGradeChart from "../views/components/chart/StudentChart.vue";
+import ClassGradeChart from "../views/components/chart/ClassGradeChart.vue";
 import Billing from "../views/Billing.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
@@ -40,9 +41,17 @@ const routes = [
     }
   },
   {
-    path: "/studentChart",
+    path: "/studentGradeChart",
     name: "学生成绩报表",
-    component: StudentChart,
+    component: StudentGradeChart,
+    meta:{
+      needLogin: true
+    }
+  },
+  {
+    path: "/classGradeChart",
+    name: "班级成绩报表",
+    component: ClassGradeChart,
     meta:{
       needLogin: true
     }
