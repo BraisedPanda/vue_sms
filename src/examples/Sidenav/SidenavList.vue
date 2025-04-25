@@ -81,7 +81,7 @@ export default {
       </li>
       <li class="nav-item">
         <sidenav-item
-            to="/studentChart"
+            to="/studentGradeChart"
             :class="getRoute() === 'tables' ? 'active' : ''"
             :navText="'学生成绩报表'"
         >
@@ -92,7 +92,19 @@ export default {
           </template>
         </sidenav-item>
       </li>
-
+      <li class="nav-item">
+        <sidenav-item
+            to="/classGradeChart"
+            :class="getRoute() === 'tables' ? 'active' : ''"
+            :navText="'班级成绩报表'"
+        >
+          <template v-slot:icon>
+            <i
+                class="vxe-icon-chart-pie text-primary text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
       <li class="nav-item">
         <sidenav-item
           to="/billing"
