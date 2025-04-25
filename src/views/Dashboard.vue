@@ -48,7 +48,6 @@ const sales = {
 
 // import instance from "../utils/request";
 
-import { fetchList } from '@/api/first';
 
 export default {
   data() {
@@ -62,15 +61,6 @@ export default {
   },
   mounted() {
     // this.fetchStatistics();
-
-    fetchList()
-        .then(response => {
-          this.statistics.title = response;
-            }
-        )
-        .catch(function (error) { // 请求失败处理
-          console.log(error);
-        });
   },
 
 
