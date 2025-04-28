@@ -17,6 +17,10 @@ export function getTeacherSubjectListByCondition(params) {
     return http.post("/settingInfo/getTeacherSubjectListByCondition", params);
 }
 
+export function getTeacherSubjectListByOptionalCondition(params) {
+    return http.post("/settingInfo/getTeacherSubjectListByOptionalCondition", params);
+}
+
 export function getTeacherExamListByCondition(params) {
     return http.post("/settingInfo/getTeacherExamListByCondition", params);
 }
@@ -30,3 +34,14 @@ export function getExamMessage(params) {
 }
 
 
+export function getTeacherClassRelationListByCondition(params) {
+    return http.post("/settingInfo/getTeacherClassRelationListByCondition", params);
+}
+
+export function getAllClassInfo() {
+    return http.get("/settingInfo/getAllClassInfo");
+}
+
+export function getAllSubjectInfo() {
+    return http.get("/settingInfo/getAllSubjectInfo");
+}
