@@ -117,6 +117,28 @@ export default {
         </sidenav-item>
       </li>
 
+
+
+      <li class="mt-3 nav-item">
+        <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6 ms-2">
+          设置
+        </h6>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+            to="/teacherClassManage"
+            :class="getRoute() === 'tables' ? 'active' : ''"
+            :navText="'班级管理'"
+        >
+          <template v-slot:icon>
+            <i
+                class="vxe-icon-setting text-info text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
+
+
       <li class="mt-3 nav-item">
         <h6
           v-if="isRTL"
