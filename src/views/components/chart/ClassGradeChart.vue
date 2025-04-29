@@ -56,7 +56,7 @@ import {VxeUI} from 'vxe-pc-ui'
           <div class="pt-2 row">
             <div class="col-lg-6 mb-lg">
 
-              <div ref="chart1" style="width: 550px; height: 400px;"></div>
+              <div ref="chart1" style="width: 600px; height: 400px;"></div>
               <vxe-text class="ps-3" icon="vxe-icon-warning-circle-fill" size="mini" status="info">班级平均分低于60不显示</vxe-text>
 
             </div>
@@ -68,7 +68,7 @@ import {VxeUI} from 'vxe-pc-ui'
                   </template>
                 </vxe-form-item>
               </vxe-form>
-              <div ref="chart2" style="width: 550px; height: 400px;"></div>
+              <div ref="chart2" style="width: 600px; height: 400px;"></div>
             </div>
           </div>
 
@@ -82,7 +82,7 @@ import {VxeUI} from 'vxe-pc-ui'
                   </template>
                 </vxe-form-item>
               </vxe-form>
-              <div ref="chart3" style="width: 550px; height: 400px;"></div>
+              <div ref="chart3" style="width: 600px; height: 400px;"></div>
             </div>
             <div class="col-lg-6">
 <!--              <div ref="chart" style="width: 300px; height: 200px;"></div>-->
@@ -250,7 +250,6 @@ export default {
       const year = this.formData.year;
       const classId = this.formData.classId;
       const subjectId = this.formData.subjectId;
-      console.log('this.formData :' + JSON.stringify(this.formData))
       if (subjectId != null && subjectId !== '') {
         settingService.getTeacherExamListByCondition({
           year: year,
@@ -436,10 +435,11 @@ export default {
           left: 'center'
         },
         xAxis: {
-          min: 50
+          min: 50,
+          name: '分数',
         },
         yAxis: {
-
+          name: '人数',
         },
         tooltip: {
           trigger: 'item'
