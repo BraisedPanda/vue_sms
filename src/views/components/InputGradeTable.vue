@@ -542,6 +542,7 @@ export default {
                 subjectId: subjectId,
                 examCode: examCode
               }
+              this.queryGradeInfo();
             }
           }
         });
@@ -603,7 +604,6 @@ export default {
               VxeUI.modal.message({content: `创建成功`, status: 'success'});
               setTimeout(() => {
                 const examInfo = response.data;
-
                 settingService.getTeacherExamListByCondition({
                   year: year,
                   classId: classId,
@@ -622,7 +622,7 @@ export default {
                   }
                 });
                 this.queryGradeInfo();
-              }, 500)
+              }, 800)
 
             } else {
               VxeUI.modal.message({content: response.message, status: 'warning'});
