@@ -34,6 +34,10 @@ export function getExamMessage(params) {
 }
 
 
+export function getExamStaticInfo(params) {
+    return http.post("/settingInfo/getExamStaticInfo", params);
+}
+
 export function getTeacherClassRelationListByCondition(params) {
     return http.post("/settingInfo/getTeacherClassRelationListByCondition", params);
 }
