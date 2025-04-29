@@ -287,8 +287,10 @@ export default {
 
     querySubjectChange() {
       const classId = this.formData.classId;
+      const semesterId = this.formData.semesterId;
         settingService.getTeacherStudentListByCondition({
           classId: classId,
+          semesterId: semesterId
         }).then(response => {
           if (response.code === 200) {
             this.studentOptions = response.data;
