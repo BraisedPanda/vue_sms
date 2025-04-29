@@ -19,9 +19,82 @@
               >
               </vxe-grid>
             </div>
+
+          </div>
+
+          <div class="col-lg-12">
+            <div class="row mt-4">
+              <div class="col-xl-12">
+                <div class="row">
+
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-number',
+                    background: 'bg-gradient-primary',
+                  }"
+                        :title="top1"
+                        description="第一名"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-chart-line',
+                    background: 'bg-gradient-success',
+                  }"
+                        :title="average"
+                        description="平均分"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-add-users',
+                    background: 'bg-gradient-warning',
+                  }"
+                        :title="moreThan90"
+                        description="90分以上人数"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-star-fill',
+                    background: 'bg-gradient-danger',
+                  }"
+                        :title="excellentRate"
+                        description="优秀率(90分以上)"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-chart-pie',
+                    background: 'bg-gradient-info',
+                  }"
+                        :title="modalValue"
+                        description="分数众数"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <default-info-card
+                        :icon="{
+                    component: 'vxe-icon-calendar',
+                    background: 'bg-gradient-dark',
+                  }"
+                        :title="examDate"
+                        description="考试时间"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
+
 
     </div>
   </div>
@@ -31,8 +104,11 @@
 import * as settingService from '@/api/settingInfoService';
 import * as gradeInfoService from "@/api/gradeInfoService";
 import {VxeUI} from "vxe-pc-ui";
+import DefaultInfoCard from "@/examples/Cards/DefaultInfoCard.vue";
+
 
 export default {
+  components: { DefaultInfoCard},
 
   data() {
 
@@ -50,7 +126,7 @@ export default {
       showOverflow: true,
       border: true,
       loading: false,
-      height: 650,
+      height: 750,
       sortConfig: {
         remote: true
       },
@@ -183,13 +259,25 @@ export default {
 
     const filterList = [];
 
+    const top1 = '';
+    const average = '';
+    const moreThan90 = '';
+    const excellentRate = '';
+    const examDate = '';
+    const modalValue = '';
 
     return {
       gridOptions,
       customConfig,
       allList,
       filterList,
-      examMessage
+      examMessage,
+      top1,
+      average,
+      moreThan90,
+      excellentRate,
+      examDate,
+      modalValue,
     }
   },
 
@@ -204,7 +292,6 @@ export default {
   created() {
     this.getYearOptions();
     this.handlePageData();
-
   },
 
   methods: {
@@ -232,6 +319,20 @@ export default {
       settingService.getExamMessage(JSON.stringify(searchData)).then(response => {
         if (response.code === 200) {
           this.examMessage = response.data;
+        }
+      });
+    },
+
+    setExamStaticInfo() {
+      const searchData = this.gridOptions.formConfig.data;
+      settingService.getExamStaticInfo(JSON.stringify(searchData)).then(response => {
+        if (response.code === 200) {
+          this.top1 = response.data.top1;
+          this.average = response.data.average;
+          this.moreThan90 = response.data.moreThan90;
+          this.excellentRate = response.data.excellentRate;
+          this.examDate = response.data.examDate;
+          this.modalValue = response.data.modalValue;
         }
       });
     },
@@ -333,6 +434,7 @@ export default {
                 subjectId: subjectId,
                 examCode: examCode
               }
+              this.queryGradeInfo();
             }
           }
         });
@@ -461,6 +563,7 @@ export default {
               }
               this.setExamMessage();
               this.handlePageData();
+              this.setExamStaticInfo();
             } else {
               VxeUI.modal.message({content: response.message, status: 'warning'});
             }
