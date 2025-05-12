@@ -105,19 +105,6 @@ export default {
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
-        <sidenav-item
-          to="/billing"
-          :class="getRoute() === 'billing' ? 'active' : ''"
-          :navText="isRTL ? 'الفواتیر' : 'Billing'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-
 
       <li class="mt-3 nav-item">
         <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6 ms-2">
@@ -137,7 +124,33 @@ export default {
           </template>
         </sidenav-item>
       </li>
+      <li class="nav-item">
+        <sidenav-item
+            to="/uploadGradeInfo"
+            :class="getRoute() === 'tables' ? 'active' : ''"
+            :navText="'成绩导入'"
+        >
+          <template v-slot:icon>
+            <i
+                class="vxe-icon-upload text-danger text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
 
+
+
+<!--      <li class="nav-item">-->
+<!--        <sidenav-item-->
+<!--            to="/billing"-->
+<!--            :class="getRoute() === 'billing' ? 'active' : ''"-->
+<!--            :navText="isRTL ? 'الفواتیر' : 'Billing'"-->
+<!--        >-->
+<!--          <template v-slot:icon>-->
+<!--            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>-->
+<!--          </template>-->
+<!--        </sidenav-item>-->
+<!--      </li>-->
 
       <li class="mt-3 nav-item">
         <h6
@@ -169,35 +182,11 @@ export default {
         </sidenav-item>
       </li>
 
-      <li class="nav-item">
-        <sidenav-item
-          to="/loginService"
-          :class="getRoute() === 'login' ? 'active' : ''"
-          :navText="isRTL ? 'تسجيل الدخول' : '登录'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/signup"
-          :class="getRoute() === 'signup' ? 'active' : ''"
-          :navText="isRTL ? 'اشتراك' : 'Sign Up'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
       <li class="nav-item" @click="logout">
         <sidenav-item
             to="/signup"
             :class="getRoute() === 'signup' ? 'active' : ''"
-            :navText="isRTL ? 'اشتراك' : '登出'"
+            navText="登出"
         >
           <template v-slot:icon>
             <i class="ni ni-cart text-info text-sm opacity-10" ></i>
@@ -213,18 +202,12 @@ export default {
         title: 'Need Help?',
         description: 'Please check our docs',
         links: [
-          {
-            label: 'Documentation',
-            route:
-              'https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/',
-            color: 'dark',
-          },
-          {
-            label: 'Buy now',
-            route:
-              'https://www.creative-tim.com/product/vue-argon-dashboard-pro?ref=vadp',
-            color: 'success',
-          },
+          // {
+          //   label: 'Documentation',
+          //   route:
+          //     'https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/',
+          //   color: 'dark',
+          // }
         ],
       }"
     />
