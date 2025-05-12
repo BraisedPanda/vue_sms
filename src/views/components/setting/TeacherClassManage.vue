@@ -19,8 +19,7 @@
                   @form-submit="queryGradeInfo"
               >
                 <template #action="{ row }">
-                  <vxe-button type="text" status="primary" @click="approveRow(row)">通过</vxe-button>
-                  <vxe-button type="text" status="error" @click="rejectionRow(row)">驳回</vxe-button>
+                  <vxe-button type="text" status="error" @click="deleteRow(row)">删除</vxe-button>
                 </template>
               </vxe-grid>
 
@@ -393,18 +392,32 @@ export default {
       this.handlePageData();
     },
 
-    approveRow (row) {
-      VxeUI.modal.message({
-        content: `通过审批：${row.name}`,
-        status: 'success'
-      })
+
+    async  deleteRow (row) {
+      const obid = row.obid;
+      const type = await VxeUI.modal.confirm({
+        id: 'myUniqueConfirm',
+        title: '提示',
+        content: '确认删除该条数据？',
+        mask: true,
+        lockView: true,
+
+      });
+      if(type === 'confirm') {
+        teacherClassRelationService.deleteByObid({obid: obid}
+        ).then(response => {
+          if (response.code === 200) {
+            this.queryGradeInfo();
+            VxeUI.modal.message({
+              content: `删除成功`,
+              status: 'success'
+            })
+          }
+        }).catch(() => {
+        });
+      }
+
     },
-    rejectionRow (row) {
-      VxeUI.modal.message({
-        content: `驳回审批：${row.name}`,
-        status: 'error'
-      })
-    }
   },
 }
 
