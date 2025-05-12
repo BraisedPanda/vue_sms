@@ -1,6 +1,5 @@
 import http from "@/utils/http";
 
-
 export function getTeacherYearList() {
     return http.get("/settingInfo/getTeacherYearList");
 }
@@ -49,3 +48,9 @@ export function getAllClassInfo() {
 export function getAllSubjectInfo() {
     return http.get("/settingInfo/getAllSubjectInfo");
 }
+
+
+export function getTodayWeather() {
+    return http.get("/settingInfo/getTodayWeather");
+}
+
