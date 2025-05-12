@@ -126,7 +126,7 @@ export default {
       showOverflow: true,
       border: true,
       loading: false,
-      height: 750,
+      height: 800,
       sortConfig: {
         remote: true
       },
@@ -244,6 +244,7 @@ export default {
         {field: 'studentName', title: '姓名', align: 'center', sortable: true},
         {field: 'score', title: '分数', align: 'center', sortType: 'number', sortable: true},
         {field: 'gradeLevel', title: '等级', align: 'center'},
+        {field: 'examDate', title: '考试时间', align: 'center'},
       ],
       data: [],
       // 分页连续序号的相关代码
