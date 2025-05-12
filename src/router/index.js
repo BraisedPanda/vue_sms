@@ -6,6 +6,8 @@ import InputGradeTable from "../views/components/InputGradeTable.vue";
 import StudentGradeChart from "../views/components/chart/StudentChart.vue";
 import ClassGradeChart from "../views/components/chart/ClassGradeChart.vue";
 import TeacherClassManage from "../views/components/setting/TeacherClassManage.vue";
+import UploadGradeInfo from "../views/components/setting/UploadGradeInfo.vue";
+
 import Billing from "../views/Billing.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
@@ -61,6 +63,14 @@ const routes = [
     path: "/teacherClassManage",
     name: "班级管理",
     component: TeacherClassManage,
+    meta:{
+      needLogin: true
+    }
+  },
+  {
+    path: "/uploadGradeInfo",
+    name: "成绩导入",
+    component: UploadGradeInfo,
     meta:{
       needLogin: true
     }
