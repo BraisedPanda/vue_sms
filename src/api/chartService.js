@@ -21,4 +21,9 @@ export function getClassChart3Data(params) {
     return http.post("/chart/getClassChart3Data", params);
 }
 
+export function getDefaultClassChart1Data(params) {
+    return http.post("/chart/getDefaultClassChart1Data", params);
+}
+
+
 
