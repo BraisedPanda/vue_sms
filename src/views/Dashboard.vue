@@ -1,6 +1,7 @@
 <script setup>
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
-import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
+import MiniImgCard from "@/examples/Cards/MiniImgCard.vue";
+import * as echarts from 'echarts';
 import Carousel from "./components/Carousel.vue";
 import CategoriesList from "./components/CategoriesList.vue";
 
@@ -46,35 +47,150 @@ const sales = {
 
 <script>
 
-// import instance from "../utils/request";
-
+import * as chartService from "@/api/chartService";
 
 export default {
+
   data() {
+
+    const char1xData = [];
+    const char1yData = [];
+
     return {
-      statistics: {
-        title: '1',
-        value: '2',
-        description: '3',
+      char1xData,
+      char1yData,
+      todayWeather: {
+        cityName: '合肥',
+        today: '06月27日(星期四)',
+        maxTemp: '35℃',
+        minTemp: '24℃',
+        nowTemp: "32.6℃",
+        weather: '多云',
+        aqi: '56',
+        wind: '西南风3级',
       },
     };
   },
   mounted() {
-    // this.fetchStatistics();
+    this.reloadChar1Data();
+    // this.getTodayWeather();
   },
 
 
-  // methods: {
-  //   async fetchStatistics() {
-  //     try {
-  //       const response = await instance.get('/getTestApi');
-  //       this.statistics = response.data;
-  //     } catch (error) {
-  //       console.error('Error fetching statistics:', error);
-  //     }
-  //   },
-  // },
+  methods: {
+
+
+    reloadChar1Data() {
+      chartService.getDefaultClassChart1Data().then(response => {
+        if (response.code === 200) {
+          this.char1xData = response.data.xdata;
+          this.char1yData = response.data.ydata;
+          this.initChart1();
+        }
+      });
+    },
+
+
+
+    initChart1() {
+      if(this.$refs.chart1 != null) {
+        this.chart = echarts.init(this.$refs.chart1);
+      }
+      const option = {
+        title: {
+          text: '本学期班级平均分',
+        },
+        legend: {
+          data: ['平均分-折线', '平均分-柱状']
+        },
+        backgroundColor: '#FFFFFF',
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            label: {
+              show: true,
+            },
+            type: 'cross'
+          }
+        },
+        xAxis: {
+          data: this.char1xData,
+          axisLabel: {
+            //x轴文字的配置
+            show: true,
+            interval: 0,//使x轴文字显示全
+            formatter: function(params) {
+              var newParamsName = "";
+              var paramsNameNumber = params.length;
+              var provideNumber = 4; //一行显示几个字
+              var rowNumber = Math.ceil(paramsNameNumber / provideNumber);
+              if (paramsNameNumber > provideNumber) {
+                for (var p = 0; p < rowNumber; p++) {
+                  var tempStr = "";
+                  var start = p * provideNumber;
+                  var end = start + provideNumber;
+                  if (p == rowNumber - 1) {
+                    tempStr = params.substring(start, paramsNameNumber);
+                  } else {
+                    tempStr = params.substring(start, end) + "\n";
+                  }
+                  newParamsName += tempStr;
+                }
+              } else {
+                newParamsName = params;
+              }
+              return newParamsName;
+            }
+          },
+        },
+        yAxis: [
+          {
+            type: 'value',
+            position: 'left',
+            alignTicks: true,
+            min: 80,
+            axisLine: {
+              show: true,
+            },
+
+          },
+          {
+            type: 'value',
+            position: 'right',
+            alignTicks: true,
+            min: 80,
+            axisLine: {
+              show: true,
+            },
+          },
+        ],
+
+        series: [
+          {
+            name: '平均分-折线',
+            color: '#EE6666',
+            type: 'line',
+            smooth: true,
+            data: this.char1yData
+          },
+          {
+            name: '平均分-柱状',
+            color: '#91CC75',
+            type: 'bar',
+            data: this.char1yData
+          }
+        ],
+      };
+      this.chart.setOption(option);
+
+    },
+
+  },
 };
+
+
+
+
 </script>
 
 
@@ -84,17 +200,17 @@ export default {
       <div class="col-lg-12">
         <div class="row">
           <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card
-              :title="statistics.title"
-              :value="statistics.value"
-              :description="statistics.description"
-              :icon="{
-                component: 'ni ni-money-coins',
-                background: 'bg-gradient-primary',
+            <mini-img-card
+              :title="todayWeather.cityName + '  ' + todayWeather.today"
+              :value="todayWeather.weather"
+              :description="todayWeather.minTemp + '~' + todayWeather.maxTemp + ' ' + todayWeather.wind"
+              :img="{
+                src: 'https://i.i8tq.com/e_index/todayweather/01_d.png',
                 shape: 'rounded-circle',
               }"
             />
           </div>
+
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
               title="Today's Users"
@@ -109,6 +225,7 @@ export default {
               }"
             />
           </div>
+
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
               title="New Clients"
@@ -123,6 +240,7 @@ export default {
               }"
             />
           </div>
+
           <div class="col-lg-3 col-md-6 col-12">
             <mini-statistics-card
               title="Sales"
@@ -137,37 +255,15 @@ export default {
               }"
             />
           </div>
+
         </div>
         <div class="row">
           <div class="col-lg-7 mb-lg">
             <!-- line chart -->
-            <div class="card z-index-2">
-              <gradient-line-chart
-                id="chart-line"
-                title="Sales Overview"
-                description="<i class='fa fa-arrow-up text-success'></i>
-      <span class='font-weight-bold'>4% more</span> in 2021"
-                :chart="{
-                  labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                  ],
-                  datasets: [
-                    {
-                      label: 'Mobile Apps',
-                      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                    },
-                  ],
-                }"
-              />
+            <div class="card card-body z-index-2">
+              <div ref="chart1" style="height: 400px;"></div>
             </div>
+
           </div>
           <div class="col-lg-5">
             <carousel />
