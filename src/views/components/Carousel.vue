@@ -10,71 +10,51 @@
           class="carousel-item h-100 active"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/carousel-1.jpg') + ')',
+              'url(' + imgUrl1 + ')',
             backgroundSize: 'cover',
           }"
         >
           <div
-            class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5"
+            class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-3"
           >
-            <div
-              class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3"
-            >
-              <i class="ni ni-camera-compact text-dark opacity-10"></i>
-            </div>
-            <h5 class="text-white mb-1">Get started with Argon</h5>
-            <p>
-              There’s nothing I really wanted to do in life that I wasn’t able
-              to get good at.
-            </p>
+            <h5 class="text-white bold  mb-3">{{content}}</h5>
+            <p class="text-sm">{{title}} · {{author}}</p>
           </div>
         </div>
+
         <div
           class="carousel-item h-100"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/carousel-2.jpg') + ')',
+              'url(' + imgUrl2 + ')',
             backgroundSize: 'cover',
           }"
         >
           <div
-            class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5"
+            class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-3"
           >
-            <div
-              class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3"
-            >
-              <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-            </div>
-            <h5 class="text-white mb-1">Faster way to create web pages</h5>
-            <p>
-              That’s my skill. I’m not really specifically talented at anything
-              except for the ability to learn.
-            </p>
+
+            <h5 class="text-white bold  mb-3">{{content2}}</h5>
+            <p class="text-sm">{{title2}} · {{author2}}</p>
           </div>
         </div>
+
         <div
           class="carousel-item h-100"
           :style="{
-            backgroundImage:
-              'url(' + require('@/assets/img/carousel-3.jpg') + ')',
+            backgroundImage:'url(' + imgUrl3 + ')',
             backgroundSize: 'cover',
           }"
         >
           <div
-            class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5"
+              class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-3"
           >
-            <div
-              class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3"
-            >
-              <i class="ni ni-trophy text-dark opacity-10"></i>
-            </div>
-            <h5 class="text-white mb-1">Share with us your design tips!</h5>
-            <p>
-              Don’t be afraid to be wrong because you can’t learn anything from
-              a compliment.
-            </p>
+
+            <h5 class="text-white bold  mb-3">{{content3}}</h5>
+            <p class="text-sm">{{title3}} · {{author3}}</p>
           </div>
         </div>
+
       </div>
       <button
         class="carousel-control-prev w-5 me-3"
@@ -97,3 +77,100 @@
     </div>
   </div>
 </template>
+
+<script>
+
+// import * as settingService from "@/api/settingInfoService";
+
+
+export default {
+
+  data() {
+    const jinrishici = require('jinrishici');
+
+    const title = '';
+    const author = '';
+    const content = '';
+    const title2 = '';
+    const author2 = '';
+    const content2 = '';
+    const title3 = '';
+    const author3 = '';
+    const content3 = '';
+    const imgUrl1 = '';
+    const imgUrl2 = '';
+    const imgUrl3 = '';
+
+    return {
+      jinrishici,
+      title,
+      author,
+      content,
+      title2,
+      author2,
+      content2,
+      title3,
+      author3,
+      content3,
+      imgUrl1,
+      imgUrl2,
+      imgUrl3,
+
+    };
+  },
+  mounted() {
+
+  },
+
+  created() {
+    this.getImageUrl()
+    this.loadSentence();
+  },
+
+  methods: {
+
+    loadSentence: function() {
+      try {
+        this.jinrishici.load(result => {
+          this.content = result.data.content
+          this.title = result.data.origin.title
+          this.author = result.data.origin.author
+        });
+        this.jinrishici.load(result => {
+          this.content2 = result.data.content
+          this.title2 = result.data.origin.title
+          this.author2 = result.data.origin.author
+        });
+        this.jinrishici.load(result => {
+          this.content3 = result.data.content
+          this.title3 = result.data.origin.title
+          this.author3 = result.data.origin.author
+        });
+      }catch (error) {
+        console.error('jinrishici捕获到错误:', error);
+      }
+     
+    },
+
+    getImageUrl() {
+      this.imgUrl1 = 'https://bing.img.run/rand.php';
+      this.imgUrl2 = 'https://bing.img.run/rand_1366x768.php';
+      this.imgUrl3 = 'https://bing.img.run/rand_m.php';
+
+      // settingService.getImageUrl().then(response => {
+      //   if (response.code === 200) {
+      //     this.imgUrl1 = response.data.imageUrl1;
+      //     this.imgUrl2 = response.data.imageUrl2;
+      //     this.imgUrl3 = response.data.imageUrl3;
+      //
+      //   }
+      // });
+    },
+
+
+
+
+
+  },
+};
+</script>
