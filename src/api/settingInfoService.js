@@ -50,7 +50,7 @@ export function getAllSubjectInfo() {
 }
 
 
-export function getTodayWeather() {
-    return http.get("/settingInfo/getTodayWeather");
+export function getDashboard() {
+    return http.get("/settingInfo/getDashboard");
 }
 
