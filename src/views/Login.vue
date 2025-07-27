@@ -149,6 +149,8 @@ export default {
                         placeholder="User Name"
                         name="username"
                         v-model="username"
+                        modelValue="guest"
+
                         size="lg"
                       />
                     </div>
@@ -156,9 +158,10 @@ export default {
                       <argon-input
                         id="password"
                         type="password"
-                        placeholder="Password"
+                        placeholder="123456"
                         name="password"
                         v-model="password"
+                        modelValue="123456"
                         size="lg"
                       />
                     </div>
