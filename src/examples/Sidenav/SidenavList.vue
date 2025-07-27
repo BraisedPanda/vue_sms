@@ -166,7 +166,7 @@ export default {
           class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="isRTL ? 'me-4' : 'ms-2'"
         >
-          ACCOUNT PAGES
+          账户
         </h6>
       </li>
 
@@ -174,7 +174,7 @@ export default {
         <sidenav-item
           to="/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
-          :navText="isRTL ? 'حساب تعريفي' : 'Profile'"
+          :navText="isRTL ? 'حساب تعريفي' : '个人信息'"
         >
           <template v-slot:icon>
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>

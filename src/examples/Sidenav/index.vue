@@ -40,7 +40,7 @@ const darkMode = computed(() => store.state.darkMode);
           alt="main_logo"
         />
 
-        <span class="ms-2 font-weight-bold me-2">SSM</span>
+        <span class="ms-2 font-weight-bold me-2">学生成绩管理系统</span>
       </router-link>
     </div>
 

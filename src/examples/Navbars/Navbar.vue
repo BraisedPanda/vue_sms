@@ -52,8 +52,8 @@ export default {
           class="pe-md-3 d-flex align-items-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
-          <argon-avatar image="https://demos.creative-tim.com/vue-soft-ui-dashboard-pro/img/team-1.66f62826.jpg" alt="Avatar" size="sm" circular  />
-           <span class="mr-auto mx-2 text-light font-weight-bolder">张..</span>
+<!--          <argon-avatar image="/assets/img/photo.png"  size="sm" circular  />-->
+<!--           <span class="mr-auto mx-2 text-light font-weight-bolder">王老师</span>-->
         </div>
 
       </div>
